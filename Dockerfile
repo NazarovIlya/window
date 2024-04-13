@@ -8,7 +8,7 @@ RUN apk update && apk add libpq
 RUN apk add --virtual .build-deps gcc python3-dev musl-dev postgresql-dev
 
 # Обновление pip python
-RUN pip install --upgrade pip
+RUN pip install --upgrade pip && pip install wheel
 
 # Установка пакетов для проекта
 COPY requirements.txt ./requirements.txt
