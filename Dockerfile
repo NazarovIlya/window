@@ -17,7 +17,7 @@ RUN pip install -r requirements.txt
 WORKDIR /app
 
 # Удаляем зависимости билда
-RUN apk del .build-deps
+#RUN apk del .build-deps
 
 # Копирование проекта
 COPY . .
