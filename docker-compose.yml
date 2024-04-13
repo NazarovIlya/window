@@ -72,12 +72,17 @@ services:
 #                    python manage.py makemigrations &&
 #                    python manage.py migrate &&
 #                    python manage.py runserver 0.0.0.0:8000"
+    networks:
+      private:
+        ipv6_address: 2001:3200:3200::1003
+    restart: unless-stopped
+
 
 networks:
   public:
-    name: public-guider
+    name: public-window
   private:
-    name: private-guider
+    name: private-window
     internal: true
     enable_ipv6: true
     ipam:
