@@ -1,5 +1,10 @@
 version: "3.8"
 
+volumes:
+  pgdata:
+  static:
+  media:
+
 services:
   ###
   # Reverse proxy (Traefik)
