@@ -57,9 +57,9 @@ services:
 #    env_file:
 #      - docker/env/.env.dev
     volumes:
-      - ./django/:/app
-      - django/static:/app/static
-      - django/media:/app/media
+      - ./:/app
+      - static:/app/static
+      - media:/app/media
 #    depends_on:
 #      - postgres
 #      - redis
