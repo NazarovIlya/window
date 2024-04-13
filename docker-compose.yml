@@ -68,3 +68,17 @@ services:
 #                    python manage.py migrate &&
 #                    python manage.py runserver 0.0.0.0:8000"
 
+networks:
+  public:
+    name: public-guider
+  private:
+    name: private-guider
+    internal: true
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 2001:3200:3200::/64
+          gateway: 2001:3200:3200::1
+        - subnet: 172.16.0.0/24
+          gateway: 172.16.0.1

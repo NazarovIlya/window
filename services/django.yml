@@ -1,0 +1,14 @@
+http:
+  routers:
+   django:
+      entryPoints: 
+      - web
+      - web-secure
+      service: django-service
+      rule: Host(`okna.{{ env "BASE_DOMAIN" }}`) || Host(`www.okna.{{ env "BASE_DOMAIN" }}`)
+  services:
+    vdjango-service:
+      loadBalancer:
+        servers:
+        - url: http://django:8000/
+        passHostHeader: true
