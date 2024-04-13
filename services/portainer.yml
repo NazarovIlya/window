@@ -1,0 +1,15 @@
+http:
+  routers:
+    portainer:
+      entryPoints: 
+      - web
+      - web-secure
+      service: portainer-service
+      rule: Host(`portainer.{{ env "BASE_DOMAIN" }}`)
+
+  services:
+    portainer-service:
+      loadBalancer:
+        servers:
+        - url: http://portainer:9000/
+        passHostHeader: false

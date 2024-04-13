@@ -1,0 +1,37 @@
+# log:
+#   level: DEBUG
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: web-secure
+          scheme: https
+          permanent: true
+
+  web-secure:
+    address: ":443"
+    http:
+      tls:
+        certResolver: customResolver
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  file:
+    directory: /services
+    watch: true
+
+api:
+  dashboard: true
+
+certificatesResolvers:
+  customResolver:
+    acme:
+      email: acme@guider.pro
+      storage: /acme/acme.json
+      httpChallenge:
+        entryPoint: web

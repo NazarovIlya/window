@@ -1,0 +1,16 @@
+http:
+  routers:
+    traefik-dashboard:
+      entryPoints:
+      - web 
+      - web-secure
+      service: api@internal
+      middlewares:
+      - admin-auth
+      rule: Host(`traefik.{{ env "BASE_DOMAIN" }}`)
+
+  middlewares:
+    admin-auth:
+      basicAuth:
+        users:
+        - {{ env "TRAEFIK_AUTH" }}
