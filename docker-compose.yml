@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  ###
+  # Reverse proxy (Traefik)
+  ###
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    restart: unless-stopped
+    environment:
+      - BASE_DOMAIN=${BASE_DOMAIN}
+      - TRAEFIK_AUTH=${TRAEFIK_AUTH}
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 80:80
+      - 443:443 
+      - 5432:5432
+    networks:
+      public:
+      private:
+        ipv6_address: 2001:3200:3200::1001
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/traefik.yml:ro
+      - ./traefik/services/:/services/:ro
+      - ./traefik/acme/:/acme/
+
+  ###
+  # Portainer
+  # Port: 9000
+  ###
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    volumes:
+      - ./portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --http-enabled
+    networks:
+      private:
+        ipv6_address: 2001:3200:3200::1002
+    restart: unless-stopped
+
+  ###
+  # Django
+  # Port: 8000
+  ###
+  django:
+    build:
+      context: ./django/
+    ports:
+      - '8000:8000'
+    container_name: django
+#    env_file:
+#      - docker/env/.env.dev
+    volumes:
+      - ./django/:/app
+      - django/static:/app/static
+      - django/media:/app/media
+#    depends_on:
+#      - postgres
+#      - redis
+    command: sh -c "python manage.py collectstatic --no-input && python manage.py runserver 0.0.0.0:8000"
+#                    python manage.py makemigrations &&
+#                    python manage.py migrate &&
+#                    python manage.py runserver 0.0.0.0:8000"
+
